@@ -1,43 +1,93 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-
+    
 import { Context } from "../store/appContext";
 
-import "../../styles/demo.css";
+import "../../styles/demo.css"; 
 
 export const Demo = () => {
 	const { store, actions } = useContext(Context);
+  const [name, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const newContact = {
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+    };
+    actions.createContact(newContact);
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setAddress("");
+  }; 
+                
 	return (
-		<div className="container">
-			<ul className="list-group">
-				{store.demo.map((item, index) => {
-					return (
-						<li
-							key={index}
-							className="list-group-item d-flex justify-content-between"
-							style={{ background: item.background }}>
-							<Link to={"/single/" + index}>
-								<span>Link to: {item.title}</span>
-							</Link>
-							{// Conditional render example
-							// Check to see if the background is orange, if so, display the message
-							item.background === "orange" ? (
-								<p style={{ color: item.initial }}>
-									Check store/flux.js scroll to the actions to see the code
-								</p>
-							) : null}
-							<button className="btn btn-success" onClick={() => actions.changeColor(index, "orange")}>
-								Change Color
-							</button>
-						</li>
-					);
-				})}
-			</ul>
-			<br />
-			<Link to="/">
-				<button className="btn btn-primary">Back home</button>
-			</Link>
-		</div>
-	);
+    <div className="container">
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label htmlFor="exampleFormControlInput1" className="form-label">
+          Full Name
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="exampleFormControlInput1"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setFullName(e.target.value)}
+          required // Validación HTML5
+        />
+        <label htmlFor="exampleFormControlInput2" className="form-label">
+          Email
+        </label>
+        <input
+          type="email"
+          className="form-control"
+          id="exampleFormControlInput2"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required // Validación HTML5
+        />
+        <label htmlFor="exampleFormControlInput3" className="form-label">
+          Phone
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="exampleFormControlInput3"
+          placeholder="Enter Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required // Validación HTML5
+        />
+        <label htmlFor="exampleFormControlInput4" className="form-label">
+          Address
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="exampleFormControlInput4"
+          placeholder="Enter Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required // Validación HTML5
+        />
+      </div>
+      <button type="submit" className="btn btn-primary">
+        Save
+      </button>
+    </form>
+    <Link to="/">
+      <button className="btn btn-secondary">Back Home</button>
+    </Link>
+  </div>
+		);
 };
